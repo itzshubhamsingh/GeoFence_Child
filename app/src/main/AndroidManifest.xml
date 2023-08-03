@@ -19,7 +19,11 @@
         <receiver
             android:name=".MyReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true"/>
+        <receiver
+            android:name=".RestarterService"
+            android:enabled="true"
+            android:exported="true"/>
 
         <activity
             android:name=".BackgroundService"
@@ -33,6 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>
