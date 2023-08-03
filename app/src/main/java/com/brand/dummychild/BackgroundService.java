@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,7 +46,7 @@ public class BackgroundService extends Service {
         geofencingClient = LocationServices.getGeofencingClient(this);
         geoFenceHelper = new GeoFenceHelper(this);
         executorService = Executors.newSingleThreadExecutor();
-       GeoFenceThread thread = new GeoFenceThread();
+        GeoFenceThread thread = new GeoFenceThread();
         executorService.submit(thread);
     }
 
@@ -55,24 +57,23 @@ public class BackgroundService extends Service {
     }
 
 
-    class GeoFenceThread implements Runnable{
+    class GeoFenceThread implements Runnable {
 
         @Override
         public void run() {
-            while (true){
-                if(PreferenceUtils.getStartGeoFence(BackgroundService.this)){
+            while (true) {
+                if (PreferenceUtils.getStartGeoFence(BackgroundService.this)) {
                     PreferenceUtils.setStartGeoFence(BackgroundService.this, false);
                     LocationModel locationModel = PreferenceUtils.getLocation(BackgroundService.this);
                     LatLng latLng = new LatLng(Float.parseFloat(locationModel.getLatitude()), Float.parseFloat(locationModel.getLongitude()));
                     addGeofence(latLng, Float.parseFloat(locationModel.getRadius()));
-                }
-                else if(PreferenceUtils.getDeactivateGeofence(BackgroundService.this)){
+                } else if (PreferenceUtils.getDeactivateGeofence(BackgroundService.this)) {
                     PreferenceUtils.setDeactivateGeofence(BackgroundService.this, false);
                     deactivateGeoFence();
                 }
-                try{
+                try {
                     Thread.sleep(5000);
-                }catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -114,9 +115,31 @@ public class BackgroundService extends Service {
                 });
     }
 
+    private void removeGeoFence() {
+        PendingIntent pendingIntent = geoFenceHelper.getPendingIntent();
+        geofencingClient.removeGeofences(pendingIntent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Geofences removed
+                        Toast.makeText(BackgroundService.this, "GeoFence Removed", Toast.LENGTH_SHORT).show();
+                        // ...
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to remove geofences
+                        // ...
+                    }
+                });
+    }
+
+
     private void performBackgroundWork() {
         // Put your background task logic here
     }
+
     public void onDestroy() {
         super.onDestroy();
         // Cleanup resources or release any acquired data here
