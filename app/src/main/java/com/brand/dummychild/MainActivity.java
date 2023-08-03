@@ -26,16 +26,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MainActivity extends AppCompatActivity {
-    private GeoFenceHelper geoFenceHelper;
-    GeofencingClient geofencingClient;
-    private String GEOFENCE_ID = "SOME_GEOFENCE_ID";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startService();
-
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
