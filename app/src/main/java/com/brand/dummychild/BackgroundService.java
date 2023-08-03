@@ -69,7 +69,7 @@ public class BackgroundService extends Service {
                     addGeofence(latLng, Float.parseFloat(locationModel.getRadius()));
                 } else if (PreferenceUtils.getDeactivateGeofence(BackgroundService.this)) {
                     PreferenceUtils.setDeactivateGeofence(BackgroundService.this, false);
-                    deactivateGeoFence();
+                    removeGeoFence();
                 }
                 try {
                     Thread.sleep(5000);
@@ -78,9 +78,6 @@ public class BackgroundService extends Service {
                 }
             }
         }
-    }
-
-    private void deactivateGeoFence() {
     }
 
     private void addGeofence(LatLng latLng, float radius) {
