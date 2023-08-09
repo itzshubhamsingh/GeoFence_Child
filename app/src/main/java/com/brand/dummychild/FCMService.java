@@ -1,4 +1,6 @@
 package com.brand.dummychild;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -8,9 +10,11 @@ import org.json.JSONObject;
 public class FCMService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         // You can use this method to handle token refresh or save the FCM token to your server.
+        Log.d("token", token);
     }
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        Log.d("message_arrived", "shubham");
         // Check if the FCM message contains data payload
         try{
             JSONObject root = new JSONObject(remoteMessage.getData());

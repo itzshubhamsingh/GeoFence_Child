@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.Geofence;
@@ -20,6 +21,7 @@ public class GeoFenceHelper extends ContextWrapper {
     }
 
     public GeofencingRequest getGeofencingRequest(Geofence geofence) {
+        Log.d("geofencing request of_of_geofence_helper", "TAG");
         return new GeofencingRequest.Builder()
                 .addGeofence(geofence)
                 .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
@@ -27,6 +29,7 @@ public class GeoFenceHelper extends ContextWrapper {
     }
 
     public Geofence getGeofence(String ID, LatLng latLng, float radius, int transitionTypes) {
+        Log.d("getgeofence_of_geofence_helper", "TAG");
         return new Geofence.Builder()
                 .setCircularRegion(latLng.latitude, latLng.longitude, radius)
                 .setRequestId(ID)
@@ -41,6 +44,8 @@ public class GeoFenceHelper extends ContextWrapper {
             return pendingIntent;
         }
         Intent intent = new Intent(this, MyReceiver.class);
+//        Intent intent = new Intent("com.brand.dummychild.ACTION_RECEIVE_GEOFENCE");
+        Log.d("pending intent", "geofence helper");
         pendingIntent = PendingIntent.getBroadcast(this, 2607, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }

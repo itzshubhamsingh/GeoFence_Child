@@ -53,4 +53,14 @@ public class PreferenceUtils {
         SharedPreferences preferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
         return preferences.getBoolean("deactivateGeofence", false);
     }
+    public static void saveToken(String token, Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefeditor = preferences.edit();
+        prefeditor.putString("token", token);
+        prefeditor.apply();
+    }
+    public static String getToken(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        return preferences.getString("token", null);
+    }
 }
